@@ -107,7 +107,7 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
             ),
             Text(
               _lastWords,
-              style: TextStyle(color: Colors.cyan, fontSize: 28),
+              style: TextStyle(color: Colors.grey[400], fontSize: 28),
             ),
             SizedBox(height: 50),
             SizedBox(
@@ -117,7 +117,7 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
             SizedBox(height: 30),
             Text(
               'Listening...',
-              style: TextStyle(color: Colors.cyan, fontSize: 28),
+              style: TextStyle(color: Colors.grey[400], fontSize: 28),
             ),
           ],
         ),

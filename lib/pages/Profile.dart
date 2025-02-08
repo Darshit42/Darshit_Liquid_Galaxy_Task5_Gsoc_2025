@@ -11,7 +11,6 @@ class Notifications extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sshService = SSH(ref: ref);
-    final isKml1Sent = ref.watch(kml1provider);
 
 
     return Scaffold(
