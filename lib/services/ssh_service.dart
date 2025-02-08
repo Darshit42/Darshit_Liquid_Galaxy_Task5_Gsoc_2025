@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:dartssh2/dartssh2.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import '../provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +31,7 @@ class SSH extends ChangeNotifier {
         timeout: const Duration(seconds: 5),
       );
 
-      ref
-          .read(sshClient.notifier)
-          .state = SSHClient(
+      ref.read(sshClient.notifier).state = SSHClient(
         socket,
         username: ref.read(namepro) ?? '',
         onPasswordRequest: () => ref.read(passpro) ?? '',
@@ -54,9 +54,7 @@ class SSH extends ChangeNotifier {
   Future<void> disconnect(BuildContext context) async {
     try {
       ref.read(sshClient)?.close();
-      ref
-          .read(sshClient.notifier)
-          .state = null;
+      ref.read(sshClient.notifier).state = null;
       flag = false;
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -79,9 +77,31 @@ class SSH extends ChangeNotifier {
     }
   }
 
-  Future<void> kmlFileUpload(BuildContext context,
-      File inputFile,
-      String kmlName,) async {
+  Future<void> sendKML(BuildContext context, String kmlAsset, String kmlName, StateProvider<bool> kmlProvider) async {
+    try {
+      final data = await rootBundle.loadString(kmlAsset);
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/$kmlName.kml');
+      await file.writeAsString(data);
+
+      await kmlFileUpload(context, file, kmlName);
+      await runKml(context, kmlName);
+
+      ref.read(kmlProvider.notifier).state = true;
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error sending $kmlName: $e')),
+      );
+    }
+  }
+
+
+  Future<void> kmlFileUpload(
+    BuildContext context,
+    File inputFile,
+    String kmlName,
+  ) async {
     try {
       await ensureConnection(context);
 
@@ -94,25 +114,22 @@ class SSH extends ChangeNotifier {
       final remoteFile = await sftp.open(
         '/var/www/html/$kmlName.kml',
         mode:
-        SftpFileOpenMode.create |
-        SftpFileOpenMode.truncate |
-        SftpFileOpenMode.write,
+            SftpFileOpenMode.create |
+            SftpFileOpenMode.truncate |
+            SftpFileOpenMode.write,
       );
 
       final fileSize = await inputFile.length();
       await remoteFile.write(
         inputFile.openRead().cast(),
         onProgress: (progress) {
-          ref
-              .read(percent.notifier)
-              .state =
-              progress / fileSize;
+          ref.read(percent.notifier).state = progress / fileSize;
         },
       );
 
-      ref
-          .read(percent.notifier)
-          .state = null;
+      ref.read(percent.notifier).state = null;
+
+      runKml(context, kmlName);
       print("File upload successful.");
     } catch (error, stackTrace) {
       print("Error during kmlFileUpload: $error");
@@ -147,20 +164,16 @@ class SSH extends ChangeNotifier {
           else
             echo ${ref.read(passpro)} | sudo -S service \\\${SERVICE} restart
           fi
-          " && sshpass -p ${ref.read(
-            passpro)} ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
-        await ref.read(sshClient)?.run(
-            '"/home/${ref.read(namepro)}/bin/lg-relaunch" > /home/${ref.read(
-                namepro)}/log.txt');
+          " && sshpass -p ${ref.read(passpro)} ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
+        await ref
+            .read(sshClient)
+            ?.run(
+              '"/home/${ref.read(namepro)}/bin/lg-relaunch" > /home/${ref.read(namepro)}/log.txt',
+            );
         await ref.read(sshClient)?.run(cmd);
       }
     } catch (error) {
       print(error);
     }
   }
-
 }
-
-
-
-
