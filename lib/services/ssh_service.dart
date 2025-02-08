@@ -98,10 +98,10 @@ class SSH extends ChangeNotifier {
 
 
   Future<void> kmlFileUpload(
-    BuildContext context,
-    File inputFile,
-    String kmlName,
-  ) async {
+      BuildContext context,
+      File inputFile,
+      String kmlName,
+      ) async {
     try {
       await ensureConnection(context);
 
@@ -114,9 +114,9 @@ class SSH extends ChangeNotifier {
       final remoteFile = await sftp.open(
         '/var/www/html/$kmlName.kml',
         mode:
-            SftpFileOpenMode.create |
-            SftpFileOpenMode.truncate |
-            SftpFileOpenMode.write,
+        SftpFileOpenMode.create |
+        SftpFileOpenMode.truncate |
+        SftpFileOpenMode.write,
       );
 
       final fileSize = await inputFile.length();
@@ -168,8 +168,8 @@ class SSH extends ChangeNotifier {
         await ref
             .read(sshClient)
             ?.run(
-              '"/home/${ref.read(namepro)}/bin/lg-relaunch" > /home/${ref.read(namepro)}/log.txt',
-            );
+          '"/home/${ref.read(namepro)}/bin/lg-relaunch" > /home/${ref.read(namepro)}/log.txt',
+        );
         await ref.read(sshClient)?.run(cmd);
       }
     } catch (error) {
