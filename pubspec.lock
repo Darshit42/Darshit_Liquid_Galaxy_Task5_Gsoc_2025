@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  chat_bubbles:
+    dependency: "direct main"
+    description:
+      name: chat_bubbles
+      sha256: "902bc84e22f9ce6b993d015457067a37d37eb7478bd7b5b185712d5c5329b866"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.0"
   clock:
     dependency: transitive
     description:
@@ -126,6 +134,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_chat_bubble:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_bubble
+      sha256: ede33df7237fea3d89464c8493bfa0bee2f94f50fd097ebd30c517c3c0d4fcf9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -160,6 +176,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  glassmorphism:
+    dependency: "direct main"
+    description:
+      name: glassmorphism
+      sha256: c0f65ea2681d4ee6d4125b947946d983335cd44765e835cdc039894b076a6e31
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   google_fonts:
     dependency: "direct dev"
     description:
@@ -208,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1+1"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.2"
   js:
     dependency: transitive
     description:

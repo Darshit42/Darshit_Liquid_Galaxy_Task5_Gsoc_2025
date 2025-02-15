@@ -47,6 +47,9 @@ dependencies:
   url_launcher: ^6.3.1
   rive: ^0.12.4
   permission_handler:
+  glassmorphism:
+  flutter_chat_bubble: ^2.0.2
+  chat_bubbles: ^1.7.0
 
 
 dev_dependencies:

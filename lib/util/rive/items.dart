@@ -22,21 +22,21 @@ List<RiveAsset> bottomNavs = [
   RiveAsset(
     artboard: "CHAT",
     stateMachineName: "CHAT_Interactivity",
-    title: "Chat",
+    title: "",
   ),
   RiveAsset(
     artboard: "SEARCH",
     stateMachineName: "SEARCH_Interactivity",
-    title: "Search",
+    title: "",
   ),
   RiveAsset(
     artboard: "SETTINGS",
     stateMachineName: "SETTINGS_Interactivity",
-    title: "Setting",
+    title: "",
   ),
   RiveAsset(
     artboard: "USER",
     stateMachineName: "USER_Interactivity",
-    title: "User",
+    title: "",
   ),
 ];

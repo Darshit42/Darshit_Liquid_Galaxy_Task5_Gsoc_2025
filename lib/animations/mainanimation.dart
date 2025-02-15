@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:chat_bubbles/chat_bubbles.dart';
 
 class geminibutton extends StatefulWidget {
   geminibutton({super.key});
@@ -191,57 +193,69 @@ class _geminibutton extends State<geminibutton> with TickerProviderStateMixin {
                 itemBuilder: (context, index) {
                   final message = _messages[_messages.length - 1 - index];
                   final isUser = message['type'] == 'user';
-                  return InkWell(
-                    onTap: () {},
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        child: Text(
-                          isUser ? "U" : "G",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      title: Text(
-                        isUser ? "User" : "Gemini",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        message['text']!,
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                  );
+                  return chatbuilder(isUser, message['text']!);
                 },
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(20, 20, 20, 1),
-              border: Border(top: BorderSide(color: Colors.grey[700]!)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Type a message...",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send, color: Colors.blueAccent),
-                  onPressed: _sendMessage,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purpleAccent.withOpacity(0.25),
+                  blurRadius: 10,
+                  spreadRadius: 1,
                 ),
               ],
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  colors: [Colors.purple, Colors.pinkAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              padding: EdgeInsets.all(3),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: Colors.black,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.image, color: Colors.white),
+                      onPressed: () {
+                      },
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _messageController,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Type a message...",
+                          hintStyle: TextStyle(color: Colors.white70),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.mic, color: Colors.white),
+                      onPressed: () {
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.send, color: Colors.white),
+                      onPressed: _sendMessage,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -253,7 +267,29 @@ class _geminibutton extends State<geminibutton> with TickerProviderStateMixin {
     animationController1.dispose();
     animationController2.dispose();
     animationController3.dispose();
-
     super.dispose();
+  }
+
+
+
+  Widget chatbuilder(bool human , String mess){
+    return human?BubbleSpecialOne(
+      text: mess,
+      color: Color.fromRGBO(46, 126, 250, 1),
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+    )
+    :
+    BubbleSpecialOne(
+      text: mess,
+      isSender: false,
+      color: Color.fromRGBO(48, 48, 48, 1),
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+    );
   }
 }

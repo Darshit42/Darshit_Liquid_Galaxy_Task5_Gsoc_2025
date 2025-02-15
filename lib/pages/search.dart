@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -67,14 +66,20 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
     });
   }
 
+  late Animation colorAnimation;
+
   @override
   void initState() {
     super.initState();
     _initSpeech();
     _colorController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1250),
-    )..repeat();
+      duration: Duration(milliseconds: 1000),
+    );
+    colorAnimation = Tween<double>(begin: 0, end: 01).animate(
+      CurvedAnimation(parent: _colorController, curve: Curves.easeInOutSine),
+    );
+    _colorController.repeat();
     _slider = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -91,34 +96,57 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.4,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(28, 28, 28, 1),
+          color: Color.fromRGBO(25, 25, 25, 1).withOpacity(0.8),
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(45, 45, 45, 1).withOpacity(0.8),
+              blurRadius: 10,
+              spreadRadius: 5,
+            ),
+          ],
         ),
+
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 45),
-            Image.asset(
-              'assets/google_assistant.png',
-              height: 60,
-              fit: BoxFit.cover,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Image.asset(
+                'assets/google_assistant.png',
+                height: 60,
+                fit: BoxFit.cover,
+              ),
             ),
-            Text(
-              _lastWords,
-              style: TextStyle(color: Colors.grey[400], fontSize: 28),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  _lastWords,
+                  style: TextStyle(color: Colors.grey[400], fontSize: 28),
+                ),
+              ),
             ),
-            SizedBox(height: 50),
-            SizedBox(
-              height: 100,
-              child: Stack(children: [glow(10), glow(8), glow(6), glow(4)]),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 5,
+                    child: Stack(children: [glow(100), glow(60), glow(32), glow(22)]),
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'Listening...',
+                    style: TextStyle(color: Colors.grey[400], fontSize: 25),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 30),
-            Text(
-              'Listening...',
-              style: TextStyle(color: Colors.grey[400], fontSize: 28),
-            ),
+
           ],
         ),
       ),
@@ -148,28 +176,52 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
             alignment: Alignment.bottomCenter,
             children: [
               Center(
-                child: IconButton(
-                  icon: Image.asset(
-                    'assets/google_mic.png',
-                    width: 130,
-                    height: 130,
-                  ),
-                  iconSize: 0,
-                  onPressed: () {
+                child: GestureDetector(
+                  onTap: () {
                     _startListening();
                     _slider.forward();
                     setState(() {
                       show = true;
                     });
                   },
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.blue,
+                        width: 4,
+                      ),
+                      color: Color.fromRGBO(20, 20, 20, 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.5),
+                          spreadRadius: 3,
+                          blurRadius: 20,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/google_mic.png',
+                        width: 130,
+                        height: 130,
+                      ),
+                    ),
+                  ),
                 ),
               ),
+
 
               AnimatedBuilder(
                 animation: _sliding,
                 builder: (_, __) {
                   return Transform.translate(
-                    offset: Offset(00, MediaQuery.of(context).size.height * 0.6*_sliding.value),
+                    offset: Offset(
+                      00,
+                      MediaQuery.of(context).size.height * 0.6 * _sliding.value,
+                    ),
                     child: Sliding_assistant(),
                   );
                 },
@@ -184,9 +236,9 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
   Widget glow(double blurStrength) {
     return Center(
       child: AnimatedBuilder(
-        animation: _colorController,
+        animation: colorAnimation,
         builder: (context, child) {
-          final time = _colorController.value * 2 * pi;
+          final time = colorAnimation.value * 2 * pi;
           return SizedBox(
             height: 100,
             child: Stack(
@@ -232,7 +284,7 @@ class _VoicelineState extends State<Voiceline> with TickerProviderStateMixin {
 
   Widget _buildAnimatedBar(double time, Color color, double blurStrength) {
     return Expanded(
-      flex: ((sin(time) + 1) * 2.5).round().clamp(1, 10),
+      flex: (((sin(time) + 1))*10000).round(),
       child: Container(
         decoration: BoxDecoration(
           color: color,

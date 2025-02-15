@@ -34,13 +34,15 @@ class Notifications extends ConsumerWidget {
                         kml1provider
                     ),
                     style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 5.0, color: Color.fromRGBO(100, 25, 120, 1)),
+                      shadowColor: Colors.purple,
                       backgroundColor: const Color.fromRGBO(28, 28, 28, 1),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 2,
+                      elevation: 4,
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -62,6 +64,7 @@ class Notifications extends ConsumerWidget {
                         kml1provider
                     ),
                     style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 5.0, color: Color.fromRGBO(100, 25, 120, 1)),
                       backgroundColor: const Color.fromRGBO(28, 28, 28, 1),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -86,6 +89,7 @@ class Notifications extends ConsumerWidget {
                   ElevatedButton(
                     onPressed: () async => await sshService.cleanKML(context),
                     style: ElevatedButton.styleFrom(
+                      side: BorderSide(width: 5.0, color: Color.fromRGBO(100, 25, 120, 1)),
                       backgroundColor: const Color.fromRGBO(28, 28, 28, 1),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 15),

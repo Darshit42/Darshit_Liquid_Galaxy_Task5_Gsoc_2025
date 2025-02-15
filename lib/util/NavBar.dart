@@ -55,7 +55,7 @@ class _NavBarState extends State<NavBar> {
     if (_navKeys[index].currentContext != null) {
       final RenderBox container = context.findRenderObject() as RenderBox;
       final RenderBox icon =
-          _navKeys[index].currentContext!.findRenderObject() as RenderBox;
+      _navKeys[index].currentContext!.findRenderObject() as RenderBox;
       final containerPosition = container.localToGlobal(Offset.zero);
       final iconPosition = icon.localToGlobal(Offset.zero);
       return iconPosition.dx - containerPosition.dx;
@@ -68,98 +68,89 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(18, 18, 18, 1),
       body: _screens[_selectedIndex],
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(30, 30, 30, 1),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  bottomNavs.length,
-                  (index) => GestureDetector(
-                    key: _navKeys[index],
-                    onTap: () => _onNavItemTap(index),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          height: 36,
-                          width: 36,
-                          decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == index
-                                    ? Color.fromRGBO(
-                                      36,
-                                      36,
-                                      36,
-                                      1,
-                                    )
-                                    : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: RiveAnimation.asset(
-                            "assets/animated_icon_set.riv",
-                            artboard: bottomNavs[index].artboard,
-                            onInit: (artboard) => _onRiveInit(artboard, index),
-                          ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(18, 18, 18, 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                bottomNavs.length,
+                    (index) => GestureDetector(
+                  key: _navKeys[index],
+                  onTap: () => _onNavItemTap(index),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        height: 36,
+                        width: 36,
+                        decoration: BoxDecoration(
+                          color: _selectedIndex == index
+                              ? Color.fromRGBO(56, 36,56, 1)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          bottomNavs[index].title,
-                          style: TextStyle(
-                            color:
-                                _selectedIndex == index
-                                    ? Colors.white
-                                    : Color.fromRGBO(
-                                      130,
-                                      130,
-                                      130,
-                                      1,
-                                    ),
-                            fontSize: 12,
-                          ),
+                        child: RiveAnimation.asset(
+                          "assets/animated_icon_set.riv",
+                          artboard: bottomNavs[index].artboard,
+                          onInit: (artboard) => _onRiveInit(artboard, index),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        bottomNavs[index].title,
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Color.fromRGBO(130, 130, 130, 1),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                bottom: -5,
-                left: _getIndicatorPosition(_selectedIndex) - 34,
-                child: Container(
-                  width: 36,
-                  height: 3.5,
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(
-                      255,
-                      255,
-                      255,
-                      0.8,
+            ),
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              bottom: -5,
+              left: _getIndicatorPosition(_selectedIndex) - 15,
+              child: Container(
+                width: 30,
+                height: 3.5,
+                decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.circular(2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.purple.withOpacity(0.6),
+                      blurRadius: 18,
+                      spreadRadius: 6,
                     ),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+                    BoxShadow(
+                      color: Colors.purple.withOpacity(0.3),
+                      blurRadius: 20,
+                      spreadRadius: 12,
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
